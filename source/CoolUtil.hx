@@ -30,21 +30,24 @@ class CoolUtil
 	inline public static function coolTextFile(path:String):Array<String>
 	{
 		return [
-			for (i in Assets.getText(path).trim().split('\n')) i.trim()
+			for (i in Assets.getText(path).trim().split('\n'))
+				i.trim()
 		];
 	}
 
 	inline public static function coolStringFile(path:String):Array<String>
 	{
 		return [
-			for (i in path.trim().split('\n')) i.trim()
+			for (i in path.trim().split('\n'))
+				i.trim()
 		];
 	}
 
 	inline public static function numberArray(max:Int, ?min = 0):Array<Int>
 	{
 		return [
-			for (i in min...max) i
+			for (i in min...max)
+				i
 		];
 	}
 
@@ -115,10 +118,11 @@ class CoolUtil
 
 	/** Quick Function to Fix Save Files for Flixel 5
 		if you are making a mod, you are gonna wanna change "MemeHoovy" to something else
-		so Base Dave Engine saves won't conflict with yours
+		so Base Tristan Engine saves won't conflict with yours
 		@BeastlyGabi
 	**/
-	public static function getSavePath(folder:String = 'MemeHoovy'):String {
+	public static function getSavePath(folder:String = 'MemeHoovy'):String
+	{
 		@:privateAccess
 		return #if (flixel < "5.0.0") folder #else FlxG.stage.application.meta.get('company')
 			+ '/'

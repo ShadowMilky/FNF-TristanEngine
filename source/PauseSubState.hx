@@ -27,7 +27,6 @@ class PauseSubState extends MusicBeatSubstate
 		new PauseOption('Resume'),
 		new PauseOption('Restart Song'),
 		new PauseOption('Change Character'),
-		new PauseOption('No Miss Mode'),
 		new PauseOption('Exit to menu')
 	];
 	var curSelected:Int = 0;

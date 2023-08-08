@@ -45,13 +45,13 @@ class MainMenuState extends MusicBeatState
 
 	public static var finishedFunnyMove:Bool = false;
 
-	public static var daRealEngineVer:String = 'Dave';
-	public static var engineVer:String = '0.2 ALPHA-Prerelease';
+	public static var daRealEngineVer:String = 'Tristan';
+	public static var engineVer:String = '0.1 PRE-ALPHA';
 
-	public static var engineVers:Array<String> = ['Dave'];
+	public static var engineVers:Array<String> = ['Tristan'];
 
-	public static var kadeEngineVer:String = "DAVE";
-	public static var gameVer:String = "0.2.7.1";
+	public static var kadeEngineVer:String = "Tristan";
+	public static var gameVer:String = "0.2.8";
 
 	var bg:FlxSprite;
 	var magenta:FlxSprite;
@@ -152,12 +152,6 @@ class MainMenuState extends MusicBeatState
 
 		var tex = Paths.getSparrowAtlas('ui/main_menu_icons');
 
-		// camFollow = new FlxObject(0, 0, 1, 1);
-		// add(camFollow);
-
-		// FlxG.camera.follow(camFollow, null, 0.06);
-
-		// camFollow.setPosition(640, 150.5);
 
 		for (i in 0...optionShit.length)
 		{
@@ -319,12 +313,12 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				if (optionShit[curSelected] == 'discord' || optionShit[curSelected] == 'merch')
+				if (optionShit[curSelected] == 'discord')
 				{
 					switch (optionShit[curSelected])
 					{
 						case 'discord':
-							fancyOpenURL("https://www.discord.gg/vsdave");
+							fancyOpenURL("https://discord.gg/btYtsZwf8N");
 					}
 				}
 				else
@@ -355,7 +349,7 @@ class MainMenuState extends MusicBeatState
 								{
 									case 'story mode':
 										FlxG.switchState(new StoryMenuState());
-									case 'freeplay' | 'freeplay glitch':
+									case 'freeplay':
 										if (FlxG.random.bool(0.05))
 										{
 											fancyOpenURL("https://www.youtube.com/watch?v=Z7wWa1G9_30%22");

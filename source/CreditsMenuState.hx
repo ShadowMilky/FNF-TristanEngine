@@ -37,6 +37,7 @@ using StringTools;
 	-vs dave dev T5mpler 
 	i have to put this here just in case you think of doing so
  */
+// wdym this already has your credit i aint expecting myself to rewrite this thing would i
 class CreditsMenuState extends MusicBeatState
 {
 	var bg:FlxSprite = new FlxSprite();
@@ -78,12 +79,14 @@ class CreditsMenuState extends MusicBeatState
 			new Social('soundcloud', 'https://soundcloud.com/moldygh')
 		]),
 		new Person("MissingTextureMan101", CreditsType.Dev, [
+			// made the Character Select (may rework it in a bit) and Music Player!!!!!!!!!!
 			new Social('youtube', 'https://www.youtube.com/channel/UCCJna2KG54d1604L2lhZINQ'),
 			new Social('twitter', 'https://twitter.com/OfficialMTM101'),
 			new Social('twitch', 'https://www.twitch.tv/missingtextureman101'),
 			new Social('gamebanana', 'https://gamebanana.com/members/1665049')
 		]),
 		new Person("T5mpler", CreditsType.Dev, [
+			// made ChangeKeybinds and this credits menu, both will be reworked soon
 			new Social('youtube', 'https://www.youtube.com/channel/UCgNoOsE_NDjH6ac4umyADrw'),
 			new Social('twitter', 'https://twitter.com/RealT5mpler'),
 			new Social('soundcloud', 'https://soundcloud.com/t5mpler')

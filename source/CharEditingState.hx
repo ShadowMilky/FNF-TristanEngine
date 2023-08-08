@@ -19,7 +19,7 @@ import openfl.events.IOErrorEvent;
 /**
 	*DEBUG MODE
  */
-class AnimationDebug extends MusicBeatState
+class CharEditingState extends MusicBeatState
 {
 	var bf:Boyfriend;
 	var dad:Character;

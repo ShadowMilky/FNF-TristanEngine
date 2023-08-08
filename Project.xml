@@ -2,10 +2,14 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' Dave Engine" file="DaveEngine" packageName="dnbteam.daveengine" package="dnbteam.daveengine" main="Main" version="3.0.0" company="dnbteam"/>
+	<app title="Friday Night Funkin' Tristan Engine" packageName="CharlesCatYT.tristanengine" package="CharlesCatYT.tristanengine" main="Main" version="3.0.0" company="CharlesCatYT"/>
 	<app preloader="flixel.system.FlxPreloader"/>
 
-	<set name="APP_ID" value="0x0100f6c013bbc000"/>
+	<app file="TristanEngine" if="windows" />
+	<app file="TristanLinux" if="linux" />
+	<app file="TristanMac" if="mac" />
+	<app file="TristanEngine32" if="32bit" />
+
 	<set name="SWF_VERSION" value="11.8"/>
 
 	<!-- ____________________________ Window Settings ___________________________ -->
@@ -42,7 +46,7 @@
 	<assets path="assets/shared"   library="shared"   exclude="*.mp3" unless="web"/>
 	<assets path='art/readme.txt' rename='PLEASE READ.txt' />
 	<assets path="CHANGELOG.md" rename='changelog.txt'/>
-	<assets path="assets/fonts" embed='true'/>
+	<assets path="assets/fonts" />
 
 	<define name="CRASH_HANDLER" if="desktop release" />
 	<define name="VIDEOS_ALLOWED" if="desktop || android" unless="32bits"/>

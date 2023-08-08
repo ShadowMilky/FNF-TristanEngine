@@ -290,7 +290,7 @@ class TitleState extends MusicBeatState
 				case 12:
 					addMoreText("Friday Night Funkin'");
 				case 13:
-					addMoreText('Dave');
+					addMoreText('Tristan');
 				case 14:
 					addMoreText('Engine');
 				case 16:

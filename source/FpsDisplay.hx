@@ -86,15 +86,17 @@ class FpsDisplay extends TextField
 			var memoryMegas:Float = 0;
 			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
 			if (memoryMegas > 1000)
-				text += "\nMemory: " + FlxMath.roundDecimal((memoryMegas / 1000), 2) + " GB";
+				text += "\nMEM: " + FlxMath.roundDecimal((memoryMegas / 1000), 2) + " GB";
 			else
-				text += "\nMemory: " + memoryMegas + " MB";
+				text += "\nMEM: " + memoryMegas + " MB";
 			#end
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))
 			text += "\ntotalDC: " + Context3DStats.totalDrawCalls();
 			text += "\nstageDC: " + Context3DStats.contextDrawCalls(DrawCallContext.STAGE);
 			text += "\nstage3DDC: " + Context3DStats.contextDrawCalls(DrawCallContext.STAGE3D);
 			#end
+
+			text += "\nTristan Engine Pre-Alpha";
 		}
 
 		cacheCount = currentCount;

@@ -272,7 +272,7 @@ class Character extends FlxSprite
 				animation.addByPrefix('singDOWN', "MOM DOWN POSE", 24, false);
 				animation.addByPrefix('singLEFT', 'Mom Left Pose', 24, false);
 				// ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
-				// CUZ DAVE IS DUMB!
+				// CUZ PHANTOM IS DUMB!
 				animation.addByPrefix('singRIGHT', 'Mom Pose Left', 24, false);
 
 				addOffset('idle');
@@ -613,10 +613,14 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				flipX = true;
+			default:
+				trace('loading bf since such character isnt coded in!');
+				loadBoyfriend(true, true);
 		}
 		dance();
 
-		if (isPlayer) flipX = !flipX;
+		if (isPlayer)
+			flipX = !flipX;
 	}
 
 	public function loadMappedAnims()
@@ -679,7 +683,8 @@ class Character extends FlxSprite
 				holdTimer = 0;
 			}
 
-			if (specialAnim && animation.finished){
+			if (specialAnim && animation.finished)
+			{
 				specialAnim = false;
 				dance();
 			}
@@ -724,6 +729,43 @@ class Character extends FlxSprite
 	/**
 	 * FOR DANCING SHIT
 	 */
+	inline function loadBoyfriend(flippedLol:Bool, nativePlay:Bool)
+	{
+		frames = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
+
+		animation.addByPrefix('idle', 'BF idle dance', 24, false);
+		animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
+		animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
+		animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
+		animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
+		animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
+		animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
+		animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
+		animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
+		animation.addByPrefix('hey', 'BF HEY', 24, false);
+
+		animation.addByPrefix('firstDeath', "BF dies", 24, false);
+		animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
+		animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
+		animation.addByPrefix('dodge', "boyfriend dodge", 24, false);
+		animation.addByPrefix('scared', 'BF idle shaking', 24);
+		animation.addByPrefix('hit', 'BF hit', 24, false);
+
+		loadOffsetFile(curCharacter);
+
+		skins.set('gfSkin', 'gf');
+
+		barColor = FlxColor.fromRGB(49, 176, 209);
+
+		playAnim('idle');
+
+		if (nativePlay)
+			nativelyPlayable = true;
+
+		if (flippedLol)
+			flipX = true;
+	}
+
 	public function dance()
 	{
 		if (!debugMode && canDance)
@@ -781,7 +823,8 @@ class Character extends FlxSprite
 					else
 						playAnim('danceLeft');
 				default:
-					if (!specialAnim){
+					if (!specialAnim)
+					{
 						playAnim('idle');
 					}
 			}

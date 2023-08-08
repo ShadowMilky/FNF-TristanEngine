@@ -29,6 +29,7 @@ import sys.FileSystem;
 	i do not give you guys permission to grab this specific code and re-use it in your own mods without asking me first.
 	the secondary dev, ben
  */
+// might rework this later, toodles!
 class CharacterInSelect
 {
 	public var name:String;

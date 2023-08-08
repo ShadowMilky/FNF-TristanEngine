@@ -23,7 +23,7 @@ import Discord.DiscordClient;
 using StringTools;
 
 // a lot of this code is copied from freeplay lol
-// unlike the character select code, you guys are free to use this without asking me(but you gotta give me credit), although you might have to ask moldy. -ben
+// unlike the character select code, you guys are free to use this without asking me (but you gotta give me credit), although you might have to ask moldy. -ben
 
 class MusicPlayerState extends MusicBeatState
 {

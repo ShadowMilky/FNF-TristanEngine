@@ -1,7 +1,8 @@
-# 0.2.0 DAVE ENGINE ALPHA-PRE-RELEASE
-- TBA
-
-# 0.1.0 DAVE ENGINE ALPHA
+# 0.1.0 Tristan ENGINE ALPHA
 - Based on pre 3.0b Vs. Dave, the engine brings back the original fnf songs!
 - Added week 7 (WIP)
 - Fixed bugs related to Vs. Dave in general
+- Botplay
+- Note Splashes
+- Subtitles (for Ugh)
+- WIP HScript Support
