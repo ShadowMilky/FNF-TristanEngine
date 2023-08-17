@@ -58,5 +58,12 @@ class SaveDataHandler
 
 		if (FlxG.save.data.msText == null)
 			FlxG.save.data.msText = false;
+
+		if (FlxG.save.data.changedHit == null)
+		{
+			FlxG.save.data.changedHitX = -1;
+			FlxG.save.data.changedHitY = -1;
+			FlxG.save.data.changedHit = false;
+		}
 	}
 }

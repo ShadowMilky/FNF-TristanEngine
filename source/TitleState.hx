@@ -269,16 +269,16 @@ class TitleState extends MusicBeatState
 			switch (curBeat)
 			{
 				case 3:
-					addMoreText('TheBuilderXD');
-					addMoreText('Erizur, T5mpler, MemeHoovy');
+					addMoreText('CharlesCatYT and Erizur');
+					addMoreText('T5mpler, MemeHoovy');
 				case 4:
-					addMoreText('and Contributors');
+					addMoreText('and MissingTextureMan');
 				case 5:
 					deleteCoolText();
 				case 6:
-					createCoolText(['Based on Kade Engine']);
+					createCoolText(['Based on Dave Engine']);
 				case 7:
-					addMoreText('for the funnies');
+					addMoreText('and Kade Engine lol');
 				case 8:
 					deleteCoolText();
 				case 9:

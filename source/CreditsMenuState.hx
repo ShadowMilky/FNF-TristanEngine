@@ -37,7 +37,7 @@ using StringTools;
 	-vs dave dev T5mpler 
 	i have to put this here just in case you think of doing so
  */
-// wdym this already has your credit i aint expecting myself to rewrite this thing would i
+// wdym this engine already has your credit i aint expecting myself to rewrite this thing would i
 class CreditsMenuState extends MusicBeatState
 {
 	var bg:FlxSprite = new FlxSprite();
@@ -65,6 +65,9 @@ class CreditsMenuState extends MusicBeatState
 
 	var peopleInCredits:Array<Person> = [
 		// Developers //
+		new Person("CharlesCatYT", CreditsType.Dev, [
+			new Social('youtube', 'https://www.youtube.com/c/CharlesCat'),
+		]),
 		new Person("Erizur", CreditsType.Dev, [
 			new Social('youtube', 'https://www.youtube.com/channel/UCdCAaQzt9yOGfFM0gJDJ4bQ'),
 			new Social('twitter', 'https://twitter.com/am_erizur')
