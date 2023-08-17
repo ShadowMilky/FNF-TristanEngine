@@ -38,6 +38,9 @@ class SaveDataHandler
 		if (FlxG.save.data.songPosition == null)
 			FlxG.save.data.songPosition = true;
 
+		if (FlxG.save.data.accuracyDisplay == null)
+			FlxG.save.data.accuracyDisplay = true;
+
 		if (FlxG.save.data.noteCamera == null)
 			FlxG.save.data.noteCamera = true;
 
