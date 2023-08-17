@@ -13,6 +13,7 @@ import flixel.math.FlxRandom;
 import flixel.math.FlxPoint;
 import Controls.KeyboardScheme;
 import flixel.FlxG;
+import flixel.system.FlxSound;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.effects.FlxFlicker;
@@ -89,8 +90,6 @@ class MainMenuState extends MusicBeatState
 
 		KeybindPrefs.loadControls();
 
-		// daRealEngineVer = engineVers[FlxG.random.int(0, 2)];
-
 		bg = new FlxSprite(-80).loadGraphic(Paths.image('backgrounds/menu'));
 		bg.scrollFactor.set();
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
@@ -151,7 +150,6 @@ class MainMenuState extends MusicBeatState
 		add(menuItems);
 
 		var tex = Paths.getSparrowAtlas('ui/main_menu_icons');
-
 
 		for (i in 0...optionShit.length)
 		{
@@ -234,8 +232,7 @@ class MainMenuState extends MusicBeatState
 			{
 				FlxG.switchState(new ChartingState());
 			}
-			#end
-			#if release
+			#else
 			if (FlxG.keys.justPressed.SEVEN)
 			{
 				var deathSound:FlxSound = new FlxSound();

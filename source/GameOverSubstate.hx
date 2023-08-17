@@ -67,10 +67,10 @@ class GameOverSubstate extends MusicBeatSubstate
 			else
 				FlxG.switchState(new FreeplayState());
 		}
-		#if debug
+		// #if debug
 		if (FlxG.keys.justPressed.SEVEN)
 			FlxG.switchState(new CharEditingState(bf.curCharacter));
-		#end
+		// #end
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
 			FlxG.camera.follow(camFollow, LOCKON, 0.01);

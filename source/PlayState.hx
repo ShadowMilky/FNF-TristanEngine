@@ -149,8 +149,15 @@ class PlayState extends MusicBeatState
 	var tankGround:BGSprite;
 
 	var scoreTxt:FlxText;
+	var botplayTxt:FlxText;
 	var engineWatermark:FlxText;
 	var songName:FlxText;
+
+	var allNotesMs:Float = 0;
+	var averageMs:Float = 0;
+
+	var msTimeTxt:FlxText;
+	var msTimeTxtTween:FlxTween;
 
 	public static var campaignScore:Int = 0;
 
@@ -528,6 +535,25 @@ class PlayState extends MusicBeatState
 		scoreTxt.screenCenter(X);
 		add(scoreTxt);
 
+		msTimeTxt = new FlxText(0, 0, 400, "", 32);
+		msTimeTxt.setFormat(Paths.font('vcr.ttf'), 32, 0xFF3517E0, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		msTimeTxt.scrollFactor.set();
+		msTimeTxt.alpha = 0;
+		msTimeTxt.visible = true;
+		msTimeTxt.borderSize = 2;
+		add(msTimeTxt);
+
+		botplayTxt = new FlxText(400, songPosBG.y + 55, FlxG.width - 800, "BOTPLAY", 32);
+		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		botplayTxt.scrollFactor.set();
+		botplayTxt.borderSize = 2;
+		botplayTxt.visible = FlxG.save.data.botplay;
+		add(botplayTxt);
+		if (scrollType == 'downscroll')
+		{
+			botplayTxt.y = songPosBG.y - 78;
+		}
+
 		iconP1 = new HealthIcon((formoverride == "none" || formoverride == "bf") ? SONG.player1 : formoverride, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
@@ -544,6 +570,8 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		msTimeTxt.cameras = [camHUD];
+		botplayTxt.cameras = [camHUD];
 		if (engineWatermark != null)
 			engineWatermark.cameras = [camHUD];
 		doof.cameras = [camDialogue];
@@ -583,6 +611,37 @@ class PlayState extends MusicBeatState
 			{
 			});
 			scriptThing.setVariable("PlayState", this);
+			scriptThing.setVariable("StringTools", StringTools);
+			scriptThing.setVariable("Character", Character);
+			scriptThing.setVariable("dad", dad);
+			scriptThing.setVariable("gf", gf);
+			scriptThing.setVariable("bf", boyfriend);
+			scriptThing.setVariable("PlatformUtil", PlatformUtil);
+			scriptThing.setVariable("FlxTween", FlxTween); // I personally would not remove flxtween.
+			scriptThing.setVariable("FlxEase", FlxEase);
+			scriptThing.setVariable("FlxSprite", FlxSprite);
+			scriptThing.setVariable("Math", Math);
+			scriptThing.setVariable("FlxG", FlxG);
+			scriptThing.setVariable("FlxTimer", FlxTimer);
+			scriptThing.setVariable("Main", Main);
+			scriptThing.setVariable("Conductor", Conductor);
+			scriptThing.setVariable("Std", Std);
+			scriptThing.setVariable("FlxG", FlxG);
+			scriptThing.setVariable("FlxTextBorderStyle", FlxTextBorderStyle);
+			scriptThing.setVariable("Paths", Paths);
+			scriptThing.setVariable("Alphabet", Alphabet);
+			scriptThing.setVariable("curStep", curStep);
+			scriptThing.setVariable("curBeat", curBeat);
+			scriptThing.setVariable("bpm", SONG.bpm);
+			scriptThing.setVariable("goodNoteHit", function(note:Note)
+			{
+				goodNoteHit(note);
+			});
+
+			scriptThing.setVariable("fromRGB", function(Red:Int, Green:Int, Blue:Int, Alpha:Int = 255)
+			{
+				return FlxColor.fromRGB(Red, Green, Blue, Alpha);
+			});
 
 			scriptThing.loadFile();
 
@@ -1131,6 +1190,20 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition = 0;
 		Conductor.songPosition -= Conductor.crochet * 5;
 		var swagCounter:Int = 0;
+
+		if (FlxG.save.data.msText)
+		{
+			if (scrollType == 'downscroll')
+			{
+				msTimeTxt.x = playerStrums.members[1].x - 100;
+				msTimeTxt.y = playerStrums.members[1].y + 100;
+			}
+			else
+			{
+				msTimeTxt.x = playerStrums.members[1].x - 100;
+				msTimeTxt.y = playerStrums.members[1].y - 50;
+			}
+		}
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
@@ -1692,10 +1765,10 @@ class PlayState extends MusicBeatState
 
 		final thingy = 0.88;
 
-		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, thingy)), Std.int(FlxMath.lerp(150, iconP1.height, thingy)));
-		iconP1.updateHitbox();
+		iconP1.centerOffsets();
+		iconP2.centerOffsets();
 
-		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, thingy)), Std.int(FlxMath.lerp(150, iconP2.height, thingy)));
+		iconP1.updateHitbox();
 		iconP2.updateHitbox();
 
 		final iconOffset:Int = 26;
@@ -1716,7 +1789,7 @@ class PlayState extends MusicBeatState
 		else
 			iconP2.changeState('normal');
 
-		#if debug
+		// #if debug
 		if (FlxG.keys.justPressed.FOUR)
 		{
 			trace('DUMP LOL:\nDAD POSITION: ${dad.getPosition()}\nBOYFRIEND POSITION: ${boyfriend.getPosition()}\nGF POSITION: ${gf.getPosition()}\nCAMERA POSITION: ${camFollow.getPosition()}');
@@ -1769,7 +1842,7 @@ class PlayState extends MusicBeatState
 		}
 		if (FlxG.keys.justPressed.THREE)
 			FlxG.switchState(new CharEditingState(gf.curCharacter));
-		#end
+		// #end
 
 		if (startingSong)
 		{
@@ -1958,6 +2031,7 @@ class PlayState extends MusicBeatState
 
 	function destroyNote(note:Note)
 	{
+		scriptThing.executeFunc("destroyNote", [note]);
 		notes.remove(note, true);
 		note.destroy();
 	}
@@ -2049,6 +2123,8 @@ class PlayState extends MusicBeatState
 	function endSong():Void
 	{
 		inCutscene = canPause = false;
+
+		scriptThing.executeFunc("endSong");
 
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
@@ -2256,6 +2332,27 @@ class PlayState extends MusicBeatState
 	private function popUpScore(strumtime:Float, note:Note):Void
 	{
 		var noteDiff:Float = Math.abs(strumtime - Conductor.songPosition);
+
+		allNotesMs += noteDiff;
+		averageMs = allNotesMs / totalNotesHit;
+		if (FlxG.save.data.msText)
+		{
+			msTimeTxt.alpha = 1;
+			msTimeTxt.text = Std.string(Math.round(noteDiff)) + "ms";
+			if (msTimeTxtTween != null)
+			{
+				msTimeTxtTween.cancel();
+				msTimeTxtTween.destroy(); // top 10 awesome code
+			}
+			msTimeTxtTween = FlxTween.tween(msTimeTxt, {alpha: 0}, 0.25, {
+				onComplete: function(tw:FlxTween)
+				{
+					msTimeTxtTween = null;
+				},
+				startDelay: 0.7
+			});
+		}
+
 		vocals.volume = 1;
 
 		var score:Int = 350;
@@ -2596,6 +2693,8 @@ class PlayState extends MusicBeatState
 
 	function goodNoteHit(note:Note):Void
 	{
+		scriptThing.executeFunc("goodNoteHit", [note]);
+
 		if (!note.wasGoodHit)
 		{
 			if (!note.isSustainNote)
@@ -2758,13 +2857,28 @@ class PlayState extends MusicBeatState
 
 		foregroundSprites.forEach(spr -> spr.dance());
 
-		var funny:Float = Math.max(Math.min(healthBar.value, 1.9), 0.1);
+		if (curBeat % gfSpeed == 0)
+		{
+			curBeat % (gfSpeed * 2) == 0 ? {
+				iconP1.scale.set(1.1, 0.8);
+				iconP2.scale.set(1.1, 1.3);
 
-		iconP1.setGraphicSize(Std.int(iconP1.width + (50 * (funny + 0.1))), Std.int(iconP1.height - (25 * funny)));
-		iconP2.setGraphicSize(Std.int(iconP2.width + (50 * ((2 - funny) + 0.1))), Std.int(iconP2.height - (25 * ((2 - funny) + 0.1))));
+				FlxTween.angle(iconP1, -15, 0, Conductor.crochet / 1300 * gfSpeed, {ease: FlxEase.quadOut});
+				FlxTween.angle(iconP2, 15, 0, Conductor.crochet / 1300 * gfSpeed, {ease: FlxEase.quadOut});
+			} : {
+				iconP1.scale.set(1.1, 1.3);
+				iconP2.scale.set(1.1, 0.8);
 
-		iconP1.updateHitbox();
-		iconP2.updateHitbox();
+				FlxTween.angle(iconP2, -15, 0, Conductor.crochet / 1300 * gfSpeed, {ease: FlxEase.quadOut});
+				FlxTween.angle(iconP1, 15, 0, Conductor.crochet / 1300 * gfSpeed, {ease: FlxEase.quadOut});
+				}
+
+			FlxTween.tween(iconP1, {'scale.x': 1, 'scale.y': 1}, Conductor.crochet / 1250 * gfSpeed, {ease: FlxEase.quadOut});
+			FlxTween.tween(iconP2, {'scale.x': 1, 'scale.y': 1}, Conductor.crochet / 1250 * gfSpeed, {ease: FlxEase.quadOut});
+
+			iconP1.updateHitbox();
+			iconP2.updateHitbox();
+		}
 
 		if (curBeat % gfSpeed == 0)
 			gf.dance();

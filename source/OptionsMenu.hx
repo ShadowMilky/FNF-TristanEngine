@@ -36,10 +36,7 @@ class OptionsMenu extends MusicBeatState
 	var oldY:Float = 0;
 
 	override function create()
-	{
-		#if desktop
-		DiscordClient.changePresence("In the Options Menu", null);
-		#end
+	{#if desktop DiscordClient.changePresence("In the Options Menu", null); #end
 		var menuBG:FlxSprite = new FlxSprite();
 
 		menuBG.color = 0xFFea71fd;
@@ -64,6 +61,8 @@ class OptionsMenu extends MusicBeatState
 			+ (FlxG.save.data.donoteclick ? LanguageManager.getTextString('option_hitsound_on') : LanguageManager.getTextString('option_hitsound_off'))
 			+ "\n"
 			+ (FlxG.save.data.botplay ? "Botplay On" : "Botplay Off")
+			+ "\n"
+			+ (FlxG.save.data.msText ? LanguageManager.getTextString('option_mstext_on') : LanguageManager.getTextString('option_mstext_off'))
 			+ "\n"
 			+ (FlxG.save.data.noteCamera ? LanguageManager.getTextString('option_noteCamera_on') : LanguageManager.getTextString('option_noteCamera_off'))
 			+ "\n"
@@ -178,6 +177,11 @@ class OptionsMenu extends MusicBeatState
 					CompatTool.save.data.compatMode = !CompatTool.save.data.compatMode;
 					updateGroupControls(CompatTool.save.data.compatMode ? LanguageManager.getTextString('option_disable_compat') : LanguageManager.getTextString('option_enable_compat'),
 						10, 'Vertical');
+				case 10:
+					FlxG.save.data.msText = !FlxG.save.data.msText;
+					updateGroupControls(FlxG.save.data.msText ? LanguageManager.getTextString('option_mstext_on') : LanguageManager.getTextString('option_mstext.off'),
+						8,
+						'Vertical');
 			}
 		}
 	}
@@ -218,7 +222,8 @@ class OptionsMenu extends MusicBeatState
 
 			item.alpha = 0.6;
 
-			if (item.targetY == 0) item.alpha = 1;
+			if (item.targetY == 0)
+				item.alpha = 1;
 		}
 	}
 }

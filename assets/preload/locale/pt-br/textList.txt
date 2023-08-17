@@ -61,6 +61,9 @@ option_fpsCap==Limite de FPS
 option_freeplay_cutscenes_off==Cutscenes no Modo Livre OFF
 option_freeplay_cutscenes_on==Cutscenes no Modo Livre ON
 
+option_mstext_on==MS Text
+option_noteCamera_off==No MS Text
+
 option_noteCamera_on==Movimentar Camera por Pose
 option_noteCamera_off==Camera Normal
 

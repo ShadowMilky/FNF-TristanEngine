@@ -55,5 +55,8 @@ class SaveDataHandler
 
 		if (FlxG.save.data.disableFps == null)
 			FlxG.save.data.disableFps = false;
+
+		if (FlxG.save.data.msText == null)
+			FlxG.save.data.msText = false;
 	}
 }

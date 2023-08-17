@@ -207,6 +207,11 @@ class Paths
 		return getPath('locale/languages.txt', TEXT, 'preload');
 	}
 
+	inline static public function characterFile(character:String):String
+	{
+		return getPath('data/characters/' + character + '.json', TEXT, 'preload');
+	}
+
 	inline static public function offsetFile(character:String):String
 	{
 		return getPath('data/offsets/' + character + '.txt', TEXT, 'preload');

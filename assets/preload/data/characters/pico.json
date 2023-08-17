@@ -1,0 +1,46 @@
+{
+  "name": "Pico",
+  "asset": "characters/Pico_FNF_assetss",
+  "barColor": "#b7d855",
+  "flipX": true,
+  "startingAnim": "idle",
+  "globalPosition": [0, 300],
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "Pico Idle Dance"
+    },
+    {
+      "name": "singUP",
+      "prefix": "pico Up note0"
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "Pico Note Right0"
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "Pico NOTE LEFT0"
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "Pico Down Note0"
+    },
+    {
+      "name": "singUPmiss",
+      "prefix": "pico Up note miss"
+    },
+    {
+      "name": "singLEFTmiss",
+      "prefix": "Pico Note Right Miss"
+    },
+    {
+      "name": "singRIGHTmiss",
+      "prefix": "Pico NOTE LEFT miss"
+    },
+    {
+      "name": "singDOWNmiss",
+      "prefix": "Pico Down Note MISS"
+    }
+  ]
+}
