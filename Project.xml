@@ -72,6 +72,7 @@
 	<haxelib name="flixel" />
 	<haxedev set='webgl' if="web"/>
 	<haxelib name="flixel-addons" />
+	<haxedef name="openfl-enable-handle-error" if="CRASH_HANDLER" />
 	<haxelib name="hscript-improved" if="HSCRIPT_ALLOWED" />
 	<define name="hscriptPos" if="HSCRIPT_ALLOWED" />
 	<haxelib name="flixel-ui" />

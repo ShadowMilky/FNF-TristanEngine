@@ -519,7 +519,7 @@ class PlayState extends MusicBeatState
 		healthBar.createFilledBar(dad.barColor, boyfriend.barColor);
 		insert(members.indexOf(healthBarBG), healthBar);
 
-		engineWatermark = new FlxText(4, healthBarBG.y + 50, 0, SONG.song, 16);
+		engineWatermark = new FlxText(4, healthBarBG.y + 50, 0, SONG.song + " | Tristan " + MainMenuState.engineVer, 16);
 
 		engineWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		engineWatermark.scrollFactor.set();

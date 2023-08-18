@@ -11,13 +11,15 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import flixel.system.FlxSound;
 import flixel.FlxG;
-
+import lime.app.Application;
 #if CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
 #end
-
+#if desktop
+import Discord.DiscordClient;
+#end
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -65,7 +67,15 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		FlxG.signals.preStateSwitch.add(function(){
+		#if CRASH_HANDLER
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		#if cpp
+		untyped __global__.__hxcpp_set_critical_error_handler(onFatalCrash);
+		#end
+		#end
+
+		FlxG.signals.preStateSwitch.add(function()
+		{
 			FlxG.bitmap.dumpCache();
 			FlxG.sound.destroy(false);
 
@@ -76,7 +86,8 @@ class Main extends Sprite
 			openfl.system.System.gc();
 		});
 
-		FlxG.signals.postStateSwitch.add(function(){
+		FlxG.signals.postStateSwitch.add(function()
+		{
 			#if cpp
 			cpp.NativeGc.enable(true);
 			cpp.NativeGc.run(true);
@@ -91,12 +102,6 @@ class Main extends Sprite
 		fps = new FpsDisplay(10, 3, 0xFFFFFF);
 		fps.defaultTextFormat = new TextFormat("_sans", 12, 0xFFFFFF, false);
 		addChild(fps);
-
-		// Forever engine crash handler frfr
-		// but in all seriousness this is better then nothing
-		#if CRASH_HANDLER
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
-		#end
 
 		FlxG.plugins.add(new flixel.addons.plugin.ScreenShotPlugin());
 	}
@@ -117,18 +122,20 @@ class Main extends Sprite
 
 		path = "./crash/" + "TristanEngine_" + dateNow + ".txt";
 
+		errMsg += '${e.error}\n';
+
 		for (stackItem in callStack)
 		{
 			switch (stackItem)
 			{
 				case FilePos(s, file, line, column):
-					errMsg += file + " (line " + line + ")\n";
+					errMsg += 'in ${file} (line ${line})\n';
 				default:
 					Sys.println(stackItem);
 			}
 		}
 
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/CharlesCatYT/FNF-DaveEngine\n\n> Crash Handler written by: sqirra-rng";
+		errMsg += "\n\n> Crash Handler written by: squirra-rng and EliteMasterEric";
 
 		if (!FileSystem.exists("./crash/"))
 			FileSystem.createDirectory("./crash/");
@@ -138,7 +145,43 @@ class Main extends Sprite
 		Sys.println(errMsg);
 		Sys.println("Crash dump saved in " + Path.normalize(path));
 
-		lime.app.Application.current.window.alert(errMsg, "Error!");
+		Application.current.window.alert(errMsg, "Error!");
+		Sys.exit(1);
+	}
+
+	function onFatalCrash(msg:String):Void
+	{
+		var errMsg:String = "";
+		var path:String;
+		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+		var dateNow:String = Date.now().toString();
+
+		dateNow = dateNow.replace(" ", "_");
+		dateNow = dateNow.replace(":", "'");
+
+		path = "./crash/" + "TristanEngine_" + dateNow + ".txt";
+
+		errMsg += '${msg}\n';
+
+		for (stackItem in callStack)
+		{
+			switch (stackItem)
+			{
+				case FilePos(s, file, line, column):
+					errMsg += 'in ${file} (line ${line})\n';
+				default:
+					Sys.println(stackItem);
+			}
+		}
+
+		errMsg += "\n\n> Crash Handler written by: squirra-rng and EliteMasterEric";
+
+		if (!FileSystem.exists("./crash/"))
+			FileSystem.createDirectory("./crash/");
+		File.saveContent(path, errMsg + "\n");
+		Sys.println(errMsg);
+		Sys.println("Crash dump saved in " + Path.normalize(path));
+		Application.current.window.alert(errMsg, "Error!");
 		Sys.exit(1);
 	}
 	#end
