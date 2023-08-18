@@ -106,9 +106,9 @@ class Main extends Sprite
 		FlxG.plugins.add(new flixel.addons.plugin.ScreenShotPlugin());
 	}
 
-	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
-	// very cool person for real they don't get enough credit for their work
-	// I took this from psych, since it's better to have this then just simply "Null Object Reference" or nothing at all
+	/* Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
+	very cool person for real they don't get enough credit for their work
+	I took this from psych, since it's better to have this then just simply "Null Object Reference" or nothing at all */
 	#if CRASH_HANDLER
 	function onCrash(e:UncaughtErrorEvent):Void
 	{

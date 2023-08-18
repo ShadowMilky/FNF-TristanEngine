@@ -3,7 +3,6 @@ package;
 import flixel.addons.transition.Transition;
 import flixel.addons.transition.FlxTransitionableState;
 import sys.io.File;
-import lime.app.Application;
 import haxe.Exception;
 import Controls.Control;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -18,6 +17,8 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.math.FlxMath;
 import flixel.util.FlxStringUtil;
+import CharacterForm;
+import CharacterInSelect;
 #if windows
 import lime.app.Application;
 import sys.FileSystem;
@@ -30,36 +31,6 @@ import sys.FileSystem;
 	the secondary dev, ben
  */
 // might rework this later, toodles!
-class CharacterInSelect
-{
-	public var name:String;
-	public var noteMs:Array<Float>;
-	public var forms:Array<CharacterForm>;
-
-	public function new(name:String, noteMs:Array<Float>, forms:Array<CharacterForm>)
-	{
-		this.name = name;
-		this.noteMs = noteMs;
-		this.forms = forms;
-	}
-}
-
-class CharacterForm
-{
-	public var name:String;
-	public var polishedName:String;
-	public var noteType:String;
-	public var noteMs:Array<Float>;
-
-	public function new(name:String, polishedName:String, noteMs:Array<Float>, noteType:String = 'normal')
-	{
-		this.name = name;
-		this.polishedName = polishedName;
-		this.noteType = noteType;
-		this.noteMs = noteMs;
-	}
-}
-
 class CharacterSelectState extends MusicBeatState
 {
 	public var char:Boyfriend;
@@ -96,7 +67,8 @@ class CharacterSelectState extends MusicBeatState
 		new CharacterInSelect('bf', [1, 1, 1, 1], [
 			new CharacterForm('bf', 'Boyfriend', [1, 1, 1, 1]),
 			new CharacterForm('bf-pixel', 'Pixel Boyfriend', [1, 1, 1, 1]),
-			new CharacterForm('bf-christmas', 'Christmas Boyfriend', [1, 1, 1, 1])
+			new CharacterForm('bf-christmas', 'Christmas Boyfriend', [1, 1, 1, 1]),
+			new CharacterForm('pico', 'Pico', [1, 1, 1, 1])
 		])
 	];
 
@@ -257,7 +229,6 @@ class CharacterSelectState extends MusicBeatState
 		}
 		for (i in 0...4)
 		{
-			// FlxG.log.add(i);
 			var babyArrow:FlxSprite = new FlxSprite(0, FlxG.height - 40);
 
 			var noteAsset:String = 'notes/NOTE_assets';
@@ -467,6 +438,7 @@ class CharacterSelectState extends MusicBeatState
 		unlockCharacter('bf');
 		unlockCharacter('bf-pixel');
 		unlockCharacter('bf-christmas');
+		unlockCharacter('pico');
 		FlxG.save.flush();
 	}
 

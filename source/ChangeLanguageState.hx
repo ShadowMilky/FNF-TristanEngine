@@ -17,8 +17,6 @@ import flixel.util.FlxColor;
 import lime.utils.Assets;
 import flixel.util.FlxTimer;
 
-#if desktop
-#end
 class ChangeLanguageState extends MusicBeatState
 {
 	var currentLanguage:Int = 0;
@@ -32,7 +30,7 @@ class ChangeLanguageState extends MusicBeatState
 		add(languageTextGroup);
 
 		var menuBG:FlxSprite = new FlxSprite();
-		menuBG.color = 0xFFea71fd;
+		menuBG.color = 0xff123081;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.antialiasing = true;

@@ -17,6 +17,7 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 import lime.utils.Assets;
 import flixel.FlxObject;
+import SongMetadata;
 #if desktop import Discord.DiscordClient; #end
 
 class FreeplayState extends MusicBeatState
@@ -552,19 +553,5 @@ class FreeplayState extends MusicBeatState
 
 			if (item.targetY == 0) item.alpha = 1;
 		}
-	}
-}
-
-class SongMetadata
-{
-	public var songName:String = "";
-	public var week:Int = 0;
-	public var songCharacter:String = "";
-
-	public function new(song:String, week:Int, songCharacter:String)
-	{
-		this.songName = song;
-		this.week = week;
-		this.songCharacter = songCharacter;
 	}
 }

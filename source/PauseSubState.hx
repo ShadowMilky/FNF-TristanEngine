@@ -17,6 +17,7 @@ import flixel.util.FlxColor;
 import flixel.addons.display.FlxBackdrop;
 import lime.app.Application;
 import flixel.util.FlxAxes;
+import PauseOption;
 
 class PauseSubState extends MusicBeatSubstate
 {
@@ -201,25 +202,5 @@ class PauseSubState extends MusicBeatSubstate
 			if (item.targetY == 0)
 				item.alpha = 1;
 		}
-	}
-}
-
-class PauseOption
-{
-	public var optionName:String;
-
-	public function new(optionName:String)
-	{
-		this.optionName = optionName;
-	}
-
-	public static function getOption(list:Array<PauseOption>, optionName:String):PauseOption
-	{
-		for (option in list)
-		{
-			if (option.optionName == optionName)
-				return option;
-		}
-		return null;
 	}
 }

@@ -47,8 +47,6 @@ typedef CharacterData =
 	 */
 	var barColor:String;
 
-	var ?skinType:String;
-
 	/**
 	 * Whether this character uses a dancing idle instead of a regular idle.
 	 * (ex. gf, spooky)
@@ -971,8 +969,6 @@ class Character extends FlxSprite
 		updateHitbox();
 
 		antialiasing = data.antialiasing == null ? FlxG.save.data.antialiasing : data.antialiasing;
-
-		skins.set(data.skinType, '${curCharacter}');
 
 		globalOffset = data.globalPosition == null ? [0, 0] : data.globalPosition;
 		nativelyPlayable = data.nativePlayable == null ? false : data.nativePlayable;

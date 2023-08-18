@@ -15,9 +15,6 @@ import flixel.util.FlxColor;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 
-/**
-	*DEBUG MODE
- */
 class CharacterDebug extends MusicBeatState
 {
 	var bf:Character;

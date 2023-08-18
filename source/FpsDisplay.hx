@@ -96,7 +96,7 @@ class FpsDisplay extends TextField
 			text += "\nstage3DDC: " + Context3DStats.contextDrawCalls(DrawCallContext.STAGE3D);
 			#end
 
-			text += "\nTristan Engine Pre-Alpha";
+			text += "\nTristan Engine 1.0 Pre-Alpha";
 		}
 
 		cacheCount = currentCount;

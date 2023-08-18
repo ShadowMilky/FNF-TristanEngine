@@ -6,6 +6,7 @@ import flixel.tweens.FlxTween;
 import haxe.Log;
 import flixel.input.gamepad.lists.FlxBaseGamepadList;
 import flixel.FlxG;
+import Portrait;
 import flixel.FlxSprite;
 import flixel.addons.text.FlxTypeText;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -64,6 +65,7 @@ class DialogueBox extends FlxSpriteGroup
 			{
 				default:
 					FlxG.sound.music.stop();
+					FlxG.sound.playMusic(Paths.music('breakfast'), 0);
 			}
 			FlxG.sound.music.fadeIn(1, 0, 0.8);
 		}
@@ -102,13 +104,6 @@ class DialogueBox extends FlxSpriteGroup
 
 		portraitRightCharacter = ['bf', 'normal'];
 
-		/*
-			switch (PlayState.SONG.song.toLowerCase())
-			{
-
-			}
-		 */
-
 		var leftPortrait:Portrait = getPortrait(portraitLeftCharacter[0], portraitLeftCharacter[1]);
 		var rightPortrait:Portrait = getPortrait(portraitRightCharacter[0], portraitRightCharacter[1]);
 
@@ -136,18 +131,21 @@ class DialogueBox extends FlxSpriteGroup
 
 		switch (PlayState.SONG.song.toLowerCase())
 		{
-			case 'polygonized' | 'interdimensional':
-				dropText = new FlxText(242, 502, Std.int(FlxG.width * 0.6), "", 32);
-				dropText.font = 'VCR OSD Mono';
-				dropText.color = 0xFFFFFFFF;
-				dropText.antialiasing = true;
-				add(dropText);
+			/*
+				case 'polygonized' | 'interdimensional':
+					dropText = new FlxText(242, 502, Std.int(FlxG.width * 0.6), "", 32);
+					dropText.font = 'VCR OSD Mono';
+					dropText.color = 0xFFFFFFFF;
+					dropText.antialiasing = true;
+					add(dropText);
 
-				swagDialogue = new FlxTypeText(240, 500, Std.int(FlxG.width * 0.6), "", 32);
-				swagDialogue.font = 'VCR OSD Mono';
-				swagDialogue.color = 0xFF000000;
-				swagDialogue.antialiasing = true;
-				add(swagDialogue);
+					swagDialogue = new FlxTypeText(240, 500, Std.int(FlxG.width * 0.6), "", 32);
+					swagDialogue.font = 'VCR OSD Mono';
+					swagDialogue.color = 0xFF000000;
+					swagDialogue.antialiasing = true;
+					add(swagDialogue);
+			 */ // if you wanna polygonized uncomment this shit idk
+
 			default:
 				dropText = new FlxText(242, 502, Std.int(FlxG.width * 0.6), "", 32);
 				dropText.font = 'VCR OSD Mono';
@@ -413,19 +411,5 @@ class DialogueBox extends FlxSpriteGroup
 		curExpression = splitCharacters[1];
 
 		dialogueList[0] = dialogueList[0].substr(splitName[1].length + splitName[0].length + 2).trim();
-	}
-}
-
-class Portrait
-{
-	public var portraitPath:String;
-	public var portraitAnim:Animation;
-	public var left:Bool;
-
-	public function new(portraitPath:String, portraitAnim:Animation = null, left:Bool)
-	{
-		this.portraitPath = portraitPath;
-		this.portraitAnim = portraitAnim;
-		this.left = left;
 	}
 }

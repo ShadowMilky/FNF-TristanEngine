@@ -1,3 +1,3 @@
 cd ..
-lime test windows -debug
+lime test windows
 pause
