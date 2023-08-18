@@ -55,13 +55,6 @@
       "version": "8.0.1"
     },
     {
-      "name": "linc_luajit",
-      "type": "git",
-      "dir": null,
-      "ref": "master",
-      "url": "https://github.com/superpowers04/linc_luajit.git"
-    },
-    {
       "name": "openfl",
       "type": "git",
       "dir": null,
@@ -69,9 +62,18 @@
       "url": "https://github.com/elitemastereric/openfl"
     },
     {
-      "name": "sscript",
-      "type": "haxelib",
-      "version": "4.0.1"
+        "name": "flixel-screenshot-plugin",
+        "type": "git",
+        "dir": null,
+        "ref": "master",
+        "url": " https://github.com/sayofthelor/flixel-screenshot-plugin"
+      },
+    {
+      "name": "hscript-improved",
+      "type": "git",
+      "dir": null,
+      "ref": "master",
+      "url": "https://github.com/Erizur/hscript-improved.git"
     },
     {
       "name": "tjson",
