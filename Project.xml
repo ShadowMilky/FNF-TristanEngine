@@ -82,6 +82,7 @@
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 	<haxelib name="hxcpp-debug-server" if="cpp debug"/>
 	<haxedef name="HXCPP_GC_SUMMARY" if="cpp debug"/>
+	<haxedef name="HXCPP_GC_MOVING" if="cpp" />
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="flixel-screenshot-plugin" />
   

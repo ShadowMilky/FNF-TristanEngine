@@ -63,11 +63,18 @@ class CreditsMenuState extends MusicBeatState
 
 	public var DoFunnyScroll:Bool = false;
 
+	// you must keep the default credits or else we'll track ya location
+	// you must keep the default credits or else we'll track ya location
+	// you must keep the default credits or else we'll track ya location
+	// you must keep the default credits or else we'll track ya location
+	// you must keep the default credits or else we'll track ya location
+	// you must keep the default credits or else we'll track ya location
+	// you must keep the default credits or else we'll track ya location
+	// you must keep the default credits or else we'll track ya location
+	// please keep the default credits i beg of ya
 	var peopleInCredits:Array<Person> = [
 		// Developers //
-		new Person("CharlesCatYT", CreditsType.Dev, [
-			new Social('youtube', 'https://www.youtube.com/c/CharlesCat'),
-		]),
+		new Person("CharlesCatYT", CreditsType.Dev, [new Social('youtube', 'https://www.youtube.com/c/CharlesCat'),]),
 		new Person("Erizur", CreditsType.Dev, [
 			new Social('youtube', 'https://www.youtube.com/channel/UCdCAaQzt9yOGfFM0gJDJ4bQ'),
 			new Social('twitter', 'https://twitter.com/am_erizur')
