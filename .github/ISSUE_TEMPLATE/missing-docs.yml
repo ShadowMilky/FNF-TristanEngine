@@ -5,6 +5,6 @@ body:
   - type: textarea
     attributes:
       label: What needs to be documented?
-      description: 'For example: "There is no page explaining how to add a stage through source!"'
+      description: 'For example: "There is no page explaining how to add a stage through source!" (Please check for duplicates or similar issues before creating this issue.)'
     validations:
       required: true

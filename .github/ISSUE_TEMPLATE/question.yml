@@ -4,6 +4,6 @@ labels: [question]
 body:
   - type: textarea
     attributes:
-      label: What is your question?
+      label: What is your question? (Please check for duplicates or similar issues before creating this issue.)
     validations:
       required: true

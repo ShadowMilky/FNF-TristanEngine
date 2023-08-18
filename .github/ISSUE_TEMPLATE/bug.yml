@@ -5,7 +5,7 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: "Describe your bug here."
+      label: "Describe your bug here. (Please check for duplicates or similar issues before creating this issue.)"
     validations:
       required: true
 
