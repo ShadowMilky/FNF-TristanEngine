@@ -78,18 +78,7 @@ typedef AnimationData =
 	 */
 	var ?frameRate:Int;
 
-	var ?frameIndices:Array<Int>;
-
-	/**
-	 * Whether this animation can be interrupted by the dance function.
-	 * @default true
-	 */
-	var ?interrupt:Bool;
-
-	/**
-	 * The animation that this animation will go to after it is finished.
-	 */
-	var ?nextAnim:String;
+	// var ?frameIndices:Array<Int>;
 }
 
 class Character extends FlxSprite
@@ -927,7 +916,7 @@ class Character extends FlxSprite
 	function parseDataFile()
 	{
 		// Load the data from JSON and cast it to a struct we can easily read.
-		var jsonData = Paths.characterFile('${curCharacter}');
+		var jsonData = Paths.characterFile(curCharacter);
 		if (jsonData == null)
 		{
 			trace('Failed to parse JSON data for character ${curCharacter}');
@@ -939,21 +928,23 @@ class Character extends FlxSprite
 		var tex:FlxAtlasFrames = Paths.getSparrowAtlas(data.asset, 'shared');
 		frames = tex;
 
-		for (anim in data.animations)
-		{
-			var frameRate = anim.frameRate == null ? 24 : anim.frameRate;
-			var looped = anim.looped == null ? false : anim.looped;
-			var flipX = anim.flipX == null ? false : anim.flipX;
-			var flipY = anim.flipY == null ? false : anim.flipY;
+		// bro thought anim is null
 
-			if (anim.frameIndices != null)
-			{
-				animation.addByIndices(anim.name, anim.prefix, anim.frameIndices, "", frameRate, looped, flipX, flipY);
-			}
-			else
-			{
-				animation.addByPrefix(anim.name, anim.prefix, frameRate, looped, flipX, flipY);
-			}
+		for (i in data.animations)
+		{
+			var frameRate = i.frameRate == null ? 24 : i.frameRate;
+			var looped = i.looped == null ? false : i.looped;
+			var flipX = i.flipX == null ? false : i.flipX;
+			var flipY = i.flipY == null ? false : i.flipY;
+
+			/*if (anim.frameIndices != null)
+				{
+					animation.addByIndices(anim.name, anim.prefix, anim.frameIndices, "", frameRate, looped, flipX, flipY);
+				}
+				else
+				{ */
+			animation.addByPrefix(i.name, i.prefix, frameRate, looped, flipX, flipY);
+			//		}
 
 			// animOffsets[anim.name] = anim.offsets == null ? [0, 0] : anim.offsets;
 		}
@@ -961,7 +952,7 @@ class Character extends FlxSprite
 		this.isDancing = data.isDancing == null ? false : data.isDancing;
 
 		loadOffsetFile(curCharacter);
-		
+
 		flipX = data.flipX == null ? false : data.flipX;
 
 		setGraphicSize(Std.int(width * (data.scale == null ? 1 : data.scale)));
