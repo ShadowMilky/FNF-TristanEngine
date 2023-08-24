@@ -10,76 +10,9 @@ import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxSort;
 import openfl.utils.Assets as OpenFlAssets;
-import haxe.Json;
+import HUtils.HCharacter;
 
 using StringTools;
-
-typedef CharacterData =
-{
-	var name:String;
-	var asset:String;
-	var startingAnim:String;
-
-	/**
-	 * Whether this character is flipped horizontally.
-	 * @default false
-	 */
-	var ?flipX:Bool;
-
-	/**
-	 * The scale of this character.
-	 * Pixel characters typically use 6.
-	 * @default 1
-	 */
-	var ?scale:Int;
-
-	/**
-	 * Whether this character has antialiasing.
-	 * @default true
-	 */
-	var ?antialiasing:Bool;
-
-	var ?nativePlayable:Bool;
-	var ?globalPosition:Array<Float>;
-
-	/**
-	 * The color of this character's health bar.
-	 */
-	var barColor:String;
-
-	/**
-	 * Whether this character uses a dancing idle instead of a regular idle.
-	 * (ex. gf, spooky)
-	 * @default false
-	 */
-	var ?isDancing:Bool;
-
-	var animations:Array<AnimationData>;
-}
-
-typedef AnimationData =
-{
-	var name:String;
-	var prefix:String;
-	var ?offsets:Array<Int>;
-
-	/**
-	 * Whether this animation is looped.
-	 * @default false
-	 */
-	var ?looped:Bool;
-
-	var ?flipX:Bool;
-	var ?flipY:Bool;
-
-	/**
-	 * The frame rate of this animation.
-	 		* @default 24
-	 */
-	var ?frameRate:Int;
-
-	// var ?frameIndices:Array<Int>;
-}
 
 class Character extends FlxSprite
 {
@@ -104,6 +37,13 @@ class Character extends FlxSprite
 	public var skins:Map<String, String> = new Map<String, String>();
 
 	public var charList:Array<String> = [];
+
+	public var bopSpeed:Int = 2;
+	public var stopAnims = false;
+	public var stopSinging = false;
+	public var stopDancing = false;
+
+	var CharScript:Null<HCharacter> = null;
 
 	public var animationNotes:Array<Dynamic> = [];
 
@@ -685,12 +625,31 @@ class Character extends FlxSprite
 
 				flipX = true;
 			default:
-				parseDataFile();
+				if (FileSystem.exists('assets/data/characters/$curCharacter/initScript.hx'))
+				{
+					// var charCode = File.getContent('assets/characters/$curCharacter/init.hx');
+					try
+					{
+						CharScript = new HUtils.HCharacter(this, 'assets/data/characters/$curCharacter/initScript.hx');
+						CharScript.exec("create", []);
+					}
+					catch (e)
+					{
+						CharScript = null;
+						trace('Failed to load $curCharacter from HScript: ${e.message}');
+						loadBfInstead();
+					}
+				}
+				else
+					loadBfInstead();
 		}
 		dance();
 
 		if (isPlayer)
 			flipX = !flipX;
+
+		if (CharScript != null && CharScript.exists("createPost"))
+			CharScript.exec("createPost", []);
 	}
 
 	public function loadMappedAnims()
@@ -792,6 +751,12 @@ class Character extends FlxSprite
 		}
 
 		super.update(elapsed);
+
+		if (CharScript != null && CharScript.exists("update"))
+		{
+			CharScript.exec("update", [elapsed]);
+			return;
+		}
 	}
 
 	private var danced:Bool = false;
@@ -838,6 +803,12 @@ class Character extends FlxSprite
 
 	public function dance()
 	{
+		if (CharScript != null && CharScript.exists("dance"))
+		{
+			CharScript.exec("dance", []);
+			return;
+		}
+
 		if (!debugMode && canDance)
 		{
 			switch (curCharacter)
@@ -913,60 +884,47 @@ class Character extends FlxSprite
 		}
 	}
 
-	function parseDataFile()
+	// skibbidy beep po
+	// (in case there's an issue with hscript ofc)
+	function loadBfInstead()
 	{
-		// Load the data from JSON and cast it to a struct we can easily read.
-		var jsonData = Paths.characterFile(curCharacter);
-		if (jsonData == null)
-		{
-			trace('Failed to parse JSON data for character ${curCharacter}');
-			return;
-		}
+		curCharacter = "bf";
+		frames = Paths.getSparrowAtlas('characters/bfPixel', 'shared');
+		animation.addByPrefix('idle', 'BF idle dance', 24, false);
+		animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
+		animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
+		animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
+		animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
+		animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
+		animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
+		animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
+		animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
+		animation.addByPrefix('hey', 'BF HEY', 24, false);
 
-		var data:CharacterData = cast jsonData;
+		animation.addByPrefix('firstDeath', "BF dies", 24, false);
+		animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
+		animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
 
-		var tex:FlxAtlasFrames = Paths.getSparrowAtlas(data.asset, 'shared');
-		frames = tex;
+		animation.addByPrefix('scared', 'BF idle shaking', 24);
 
-		// bro thought anim is null
+		addOffset('idle', -5);
+		addOffset("singUP", -29, 27);
+		addOffset("singRIGHT", -38, -7);
+		addOffset("singLEFT", 12, -6);
+		addOffset("singDOWN", -10, -50);
+		addOffset("singUPmiss", -29, 27);
+		addOffset("singRIGHTmiss", -30, 21);
+		addOffset("singLEFTmiss", 12, 24);
+		addOffset("singDOWNmiss", -11, -19);
+		addOffset("hey", 7, 4);
+		addOffset('firstDeath', 37, 11);
+		addOffset('deathLoop', 37, 5);
+		addOffset('deathConfirm', 37, 69);
+		addOffset('scared', -4);
 
-		for (i in data.animations)
-		{
-			var frameRate = i.frameRate == null ? 24 : i.frameRate;
-			var looped = i.looped == null ? false : i.looped;
-			var flipX = i.flipX == null ? false : i.flipX;
-			var flipY = i.flipY == null ? false : i.flipY;
+		playAnim('idle');
 
-			/*if (anim.frameIndices != null)
-				{
-					animation.addByIndices(anim.name, anim.prefix, anim.frameIndices, "", frameRate, looped, flipX, flipY);
-				}
-				else
-				{ */
-			animation.addByPrefix(i.name, i.prefix, frameRate, looped, flipX, flipY);
-			//		}
-
-			// animOffsets[anim.name] = anim.offsets == null ? [0, 0] : anim.offsets;
-		}
-
-		this.isDancing = data.isDancing == null ? false : data.isDancing;
-
-		loadOffsetFile(curCharacter);
-
-		flipX = data.flipX == null ? false : data.flipX;
-
-		setGraphicSize(Std.int(width * (data.scale == null ? 1 : data.scale)));
-
-		updateHitbox();
-
-		antialiasing = data.antialiasing == null ? FlxG.save.data.antialiasing : data.antialiasing;
-
-		globalOffset = data.globalPosition == null ? [0, 0] : data.globalPosition;
-		nativelyPlayable = data.nativePlayable == null ? false : data.nativePlayable;
-
-		barColor = FlxColor.fromString(data.barColor);
-
-		playAnim(data.startingAnim);
+		flipX = true;
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void

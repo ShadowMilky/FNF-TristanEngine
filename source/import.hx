@@ -10,6 +10,11 @@ import lime.utils.Assets;
 import haxe.*;
 import flash.*;
 import hscript.*;
+import flixel.FlxG;
+import tea.*;
+
+import StringTools;
+
 #if sys
 import sys.FileSystem;
 import sys.io.File;
