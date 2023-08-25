@@ -39,6 +39,9 @@ import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
+import lime.media.AudioBuffer;
+import haxe.io.Bytes;
+import flash.geom.Rectangle;
 
 using StringTools;
 
@@ -105,6 +108,8 @@ class ChartingState extends MusicBeatState
 	var noteTypes = ['normal', 'alt-animation'];
 	var curNoteType:Int;
 
+	// var waveformSprite:FlxSprite;
+
 	override function create()
 	{
 		curSection = lastSection;
@@ -141,6 +146,9 @@ class ChartingState extends MusicBeatState
 		snapText = new FlxText(60, 10, 0, "Snap: 1/" + snap + " (Press Control to unsnap the cursor)\nAdd Notes: 1-8 (or click)\n", 14);
 		snapText.scrollFactor.set();
 
+		currentSongName = Paths.formatToSongPath(_song.song);
+		loadAudioBuffer();
+
 		gridBlackLine = new FlxSprite(gridBG.x + gridBG.width / 2).makeGraphic(2, Std.int(gridBG.height), FlxColor.BLACK);
 		add(gridBlackLine);
 
@@ -155,8 +163,12 @@ class ChartingState extends MusicBeatState
 		updateGrid();
 
 		loadSong(_song.song);
+
 		Conductor.changeBPM(_song.bpm);
 		Conductor.mapBPMChanges(_song);
+
+		// waveformSprite = new FlxSprite(GRID_SIZE, 0).makeGraphic(FlxG.width, FlxG.height, 0x00FFFFFF);
+		// add(waveformSprite);
 
 		leftIcon = new HealthIcon(_song.player1);
 		rightIcon = new HealthIcon(_song.player2);
@@ -182,6 +194,14 @@ class ChartingState extends MusicBeatState
 		dummyArrow = new FlxSprite().makeGraphic(GRID_SIZE, GRID_SIZE);
 		add(dummyArrow);
 
+		player2 = new Character(0, gridBG.y + 50, _song.player2);
+		player1 = new Boyfriend(player2.width * 0.2, gridBG.y + 150, _song.player1);
+		player1.y = player1.y - player1.height;
+		player2.setGraphicSize(Std.int(player2.width * 0.2));
+		player1.setGraphicSize(Std.int(player1.width * 0.2));
+		UI_box.add(player1);
+		UI_box.add(player2);
+
 		var tabs = [
 			{name: "Song", label: 'Song Data'},
 			{name: "Section", label: 'Section Data'},
@@ -199,6 +219,7 @@ class ChartingState extends MusicBeatState
 		addSongUI();
 		addSectionUI();
 		addNoteUI();
+		// updateWaveform();
 
 		add(curRenderedNotes);
 		add(curRenderedSustains);
@@ -207,6 +228,10 @@ class ChartingState extends MusicBeatState
 		super.create();
 	}
 
+	/*#if desktop
+		var waveformEnabled:FlxUICheckBox;
+		var waveformUseInstrumental:FlxUICheckBox;
+		#end */
 	function addSongUI():Void
 	{
 		var UI_songTitle = new FlxUIInputText(10, 10, 70, _song.song, 8);
@@ -218,8 +243,23 @@ class ChartingState extends MusicBeatState
 		check_voices.callback = function()
 		{
 			_song.needsVoices = check_voices.checked;
-			trace('CHECKED!');
 		};
+
+		/*#if desktop
+			waveformEnabled = new FlxUICheckBox(25, 245, null, null, "Visible Waveform", 100);
+			waveformEnabled.checked = false;
+			waveformEnabled.callback = function()
+			{
+				updateWaveform();
+			};
+
+			waveformUseInstrumental = new FlxUICheckBox(waveformEnabled.x + 120, waveformEnabled.y, null, null, "Waveform for Instrumental", 100);
+			waveformUseInstrumental.checked = false;
+			waveformUseInstrumental.callback = function()
+			{
+				updateWaveform();
+			};
+			#end */
 
 		var check_mute_inst = new FlxUICheckBox(10, 200, null, null, "Mute Instrumental (in editor)", 100);
 		check_mute_inst.checked = false;
@@ -324,7 +364,7 @@ class ChartingState extends MusicBeatState
 		});
 		player1DropDown.selectedLabel = _song.player1;
 
-		var player1Label = new FlxText(10, 80, 64, 'Player 1');
+		var player1Label = new FlxText(10, 80, 64, 'Boyfriend');
 
 		var player2DropDown = new FlxUIDropDownMenu(140, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
@@ -332,7 +372,15 @@ class ChartingState extends MusicBeatState
 		});
 		player2DropDown.selectedLabel = _song.player2;
 
-		var player2Label = new FlxText(140, 80, 64, 'Player 2');
+		var player2Label = new FlxText(140, 80, 64, 'Dad');
+
+		var player3DropDown = new FlxUIDropDownMenu(10, 180, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
+		{
+			_song.gf = characters[Std.parseInt(character)];
+		});
+		player3DropDown.selectedLabel = _song.gf;
+
+		var player3Label = new FlxText(10, 80, 64, 'Girlfriend');
 
 		var stageDropDown = new FlxUIDropDownMenu(140, 200, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String)
 		{
@@ -375,8 +423,10 @@ class ChartingState extends MusicBeatState
 		tab_group_assets.add(stageLabel);
 		tab_group_assets.add(player1DropDown);
 		tab_group_assets.add(player2DropDown);
+		tab_group_assets.add(player3DropDown);
 		tab_group_assets.add(player1Label);
 		tab_group_assets.add(player2Label);
+		tab_group_assets.add(player3Label);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.addGroup(tab_group_assets);
@@ -477,14 +527,6 @@ class ChartingState extends MusicBeatState
 		tab_group_note.add(applyLength);
 
 		UI_box.addGroup(tab_group_note);
-
-		/*player2 = new Character(0,gridBG.y, _song.player2);
-			player1 = new Boyfriend(player2.width * 0.2,gridBG.y + player2.height, _song.player1);
-			player1.y = player1.y - player1.height;
-			player2.setGraphicSize(Std.int(player2.width * 0.2));
-			player1.setGraphicSize(Std.int(player1.width * 0.2));
-			UI_box.add(player1);
-			UI_box.add(player2); */
 	}
 
 	function loadSong(daSong:String):Void
@@ -632,6 +674,8 @@ class ChartingState extends MusicBeatState
 	{
 		updateHeads();
 
+		FlxG.mouse.visible = true;
+
 		snapText.text = "Snap: 1/"
 			+ snap
 			+ " ("
@@ -672,7 +716,6 @@ class ChartingState extends MusicBeatState
 			{
 				deleteNote(note);
 				delete = true;
-				trace('deelte note');
 			}
 		});
 		for (p in 0...pressArray.length)
@@ -706,10 +749,6 @@ class ChartingState extends MusicBeatState
 
 		if (curBeat % 4 == 0 && curStep >= 16 * (curSection + 1))
 		{
-			trace(curStep);
-			trace((_song.notes[curSection].lengthInSteps) * (curSection + 1));
-			trace('DUMBSHIT');
-
 			if (_song.notes[curSection + 1] == null)
 			{
 				addSection();
@@ -807,7 +846,6 @@ class ChartingState extends MusicBeatState
 			{
 				if (FlxG.keys.justPressed.Z && lastNote != null)
 				{
-					trace(curRenderedNotes.members.contains(lastNote) ? "delete note" : "add note");
 					if (curRenderedNotes.members.contains(lastNote))
 						deleteNote(lastNote);
 					else
@@ -859,13 +897,10 @@ class ChartingState extends MusicBeatState
 
 				var stepMs = curStep * Conductor.stepCrochet;
 
-				trace(Conductor.stepCrochet / snap);
-
 				if (doSnapShit)
 					FlxG.sound.music.time = stepMs - (FlxG.mouse.wheel * Conductor.stepCrochet / snap);
 				else
 					FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * 0.4);
-				trace(stepMs + " + " + Conductor.stepCrochet / snap + " -> " + FlxG.sound.music.time);
 
 				vocals.time = FlxG.sound.music.time;
 			}
@@ -1226,7 +1261,6 @@ class ChartingState extends MusicBeatState
 
 		var millisecadd = (((measure * 4) + step / 4) * (60000 / _song.bpm)) + ms;
 		var totaladdsection = Std.int((millisecadd / (60000 / _song.bpm) / 4));
-		trace(millisecadd, totaladdsection);
 		if (millisecadd > 0)
 		{
 			for (i in 0...totaladdsection)

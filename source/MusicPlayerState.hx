@@ -25,7 +25,6 @@ using StringTools;
 
 // a lot of this code is copied from freeplay lol
 // unlike the character select code, you guys are free to use this without asking me (but you gotta give me credit), although you might have to ask moldy. -ben
-
 class MusicPlayerState extends MusicBeatState
 {
 	var songs:Array<PlaySongMetadata> = [];
@@ -191,6 +190,11 @@ class MusicPlayerState extends MusicBeatState
 			iconP2.changeState('losing');
 		else
 			iconP2.changeState('normal');
+
+		if (FlxG.mouse.wheel != 0)
+		{
+			changeSelection(-FlxG.mouse.wheel);
+		}
 
 		if (upP)
 		{

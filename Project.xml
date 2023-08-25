@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' Tristan Engine" packageName="CharlesCatYT.tristanengine" package="CharlesCatYT.tristanengine" main="Main" version="3.0.0" company="CharlesCatYT"/>
+	<app title="Friday Night Funkin' Tristan Engine" packageName="CharlesCatYT.tristanengine" package="CharlesCatYT.tristanengine" main="Main" version="0.2.8" company="CharlesCatYT"/>
 	<app preloader="flixel.system.FlxPreloader"/>
 
 	<app file="TristanEngine" if="windows" />
@@ -45,8 +45,8 @@
 	<assets path="assets/shared"   library="shared"   exclude="*.ogg" if="web"/>
 	<assets path="assets/shared"   library="shared"   exclude="*.mp3" unless="web"/>
 	<assets path='art/readme.txt' rename='PLEASE READ.txt' />
-	<assets path="CHANGELOG.md" rename='changelog.txt'/>
-	<assets path="assets/fonts" />
+	<assets path="CHANGELOG.md" />
+	<assets path="assets/fonts" embed='false' />
 
 	<define name="CRASH_HANDLER" if="desktop release" />
 	<define name="VIDEOS_ALLOWED" if="desktop || android" unless="32bits"/>
@@ -67,14 +67,23 @@
 		<library name="shared"   preload="false" />
 	</section>
 
+	<!-- _______________________________ Errors ______________________________ -->
+
+	<error value="You're using Haxe 4.1.5. Please update to 4.2.5 or greater." if="${haxe == 4.1.5}"
+	unless="linux" />
+
+	<error value="You're using Haxe 4.2.4. Please update to 4.2.5 or greater." if="${haxe == 4.2.4}"
+	unless="linux" />
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
 	<haxedev set='webgl' if="web"/>
 	<haxelib name="flixel-addons" />
 	<haxedef name="openfl-enable-handle-error" if="CRASH_HANDLER" />
-	<haxelib name="hscript-improved" if="HSCRIPT_ALLOWED" />
-	<define name="hscriptPos" if="HSCRIPT_ALLOWED" />
+	<haxelib name="hscript-improved" />
+	<haxedef name="hscriptPos" />
+	<haxelib name="SScript" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" />
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
@@ -86,14 +95,20 @@
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="flixel-screenshot-plugin" />
   
-	<haxedef name="HXCPP_CHECK_POINTER" />
-	<haxedef name="HXCPP_STACK_LINE" />
-	<haxedef name="HXCPP_STACK_TRACE" />
+	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
+	<haxedef name="HXCPP_DEBUG_LINK" if="CRASH_HANDLER" />
+
+	<haxedef name='no-deprecation-warnings' />
 
 	<setenv name="next"/>
 
+	<haxedef name="no_traces" unless="debug" />
+
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />
+	<haxeflag name="-dce" value="no" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 

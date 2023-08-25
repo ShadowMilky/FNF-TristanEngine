@@ -6,3 +6,7 @@
 - Note Splashes
 - Subtitles (for Ugh)
 - WIP HScript Support
+- Softcoded characters through SScript
+- Small animation debug improvements
+- Gameplay module customization menu
+- Crash handler, from Psych Engine

@@ -43,6 +43,21 @@ class CoolUtil
 		];
 	}
 
+	inline public static function browserLoad(site:String)
+	{
+		#if linux
+		Sys.command('/usr/bin/xdg-open', [site]);
+		#else
+		FlxG.openURL(site);
+		#end
+	}
+
+	inline public static function listFromString(string:String):Array<String>
+	{
+		final daList = string.trim().split('\n');
+		return [for (i in 0...daList.length) daList[i].trim()];
+	}
+
 	inline public static function numberArray(max:Int, ?min = 0):Array<Int>
 	{
 		return [
@@ -51,7 +66,7 @@ class CoolUtil
 		];
 	}
 
-	public static function formatString(string:String, separator:String):String
+	inline public static function formatString(string:String, separator:String):String
 	{
 		var split:Array<String> = string.split(separator);
 		var formattedString:String = '';
@@ -71,7 +86,7 @@ class CoolUtil
 		return formattedString;
 	}
 
-	public static function getMinAndMax(value1:Float, value2:Float):Array<Float>
+	inline public static function getMinAndMax(value1:Float, value2:Float):Array<Float>
 	{
 		var minAndMaxs = new Array<Float>();
 
@@ -84,12 +99,17 @@ class CoolUtil
 		return minAndMaxs;
 	}
 
+	inline public static function boundTo(value:Float, min:Float, max:Float):Float
+	{
+		return Math.max(min, Math.min(max, value));
+	}
+
 	inline public static function cacheImage(image:String)
 	{
 		Assets.cache.image.set(image, lime.graphics.Image.fromFile(image));
 	}
 
-	public static function isArrayEqualTo(array1:Array<Dynamic>, array2:Array<Dynamic>)
+	inline public static function isArrayEqualTo(array1:Array<Dynamic>, array2:Array<Dynamic>)
 	{
 		if (array1.length != array2.length)
 			return false;
@@ -111,7 +131,7 @@ class CoolUtil
 			Actually make and modify the scroll and lerp shit in it's own function
 			instead of solely relying on changing the lerp on the fly
 	 */
-	public static function camLerpShit(lerp:Float):Float
+	inline public static function camLerpShit(lerp:Float):Float
 	{
 		return lerp * (FlxG.elapsed / (1 / 60));
 	}
@@ -121,7 +141,7 @@ class CoolUtil
 		so Base Tristan Engine saves won't conflict with yours
 		@BeastlyGabi
 	**/
-	public static function getSavePath(folder:String = 'MemeHoovy'):String
+	inline public static function getSavePath(folder:String = 'MemeHoovy'):String
 	{
 		@:privateAccess
 		return #if (flixel < "5.0.0") folder #else FlxG.stage.application.meta.get('company')

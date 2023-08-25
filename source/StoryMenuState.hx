@@ -167,6 +167,10 @@ class StoryMenuState extends MusicBeatState
 		{
 			if (!selectedWeek)
 			{
+				if (FlxG.mouse.wheel != 0)
+				{
+					changeSelection(-FlxG.mouse.wheel);
+				}
 				if (controls.LEFT_P)
 				{
 					changeWeek(-1);

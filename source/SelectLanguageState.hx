@@ -85,6 +85,11 @@ class SelectLanguageState extends MusicBeatState
 
 		if (!accepted)
 		{
+			if (FlxG.mouse.wheel != 0)
+			{
+				changeSelection(-FlxG.mouse.wheel);
+			}
+
 			if (controls.ACCEPT)
 			{
 				accepted = true;

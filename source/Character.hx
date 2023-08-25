@@ -353,7 +353,7 @@ class Character extends FlxSprite
 				barColor = FlxColor.fromString(getColorCode(curCharacter));
 
 				playAnim('idle');
-			/* case 'pico':
+			case 'pico':
 				frames = Paths.getSparrowAtlas('characters/Pico_FNF_assetss', 'shared');
 
 				animation.addByPrefix('idle', "Pico Idle Dance", 24);
@@ -382,7 +382,7 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 
-				flipX = true; */
+				flipX = true;
 
 			case 'bf-christmas':
 				frames = Paths.getSparrowAtlas('characters/bfChristmas', 'shared');

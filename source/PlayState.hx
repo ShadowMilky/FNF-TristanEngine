@@ -78,10 +78,10 @@ class PlayState extends MusicBeatState
 
 	public var vocals:FlxSound;
 
-	private var dad:Character;
-	private var dadmirror:Character;
-	private var gf:Character;
-	private var boyfriend:Boyfriend;
+	public var dad:Character;
+	public var dadmirror:Character;
+	public var gf:Character;
+	public var boyfriend:Boyfriend;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -102,12 +102,12 @@ class PlayState extends MusicBeatState
 
 	public var health:Float = 1;
 
-	private var combo:Int = 0;
+	public var combo:Int = 0;
 
 	public static var misses:Int = 0;
 
-	private var accuracy:Float = 0.00;
-	private var totalNotesHit:Float = 0;
+	public var accuracy:Float = 0.00;
+	public var totalNotesHit:Float = 0;
 	private var totalPlayed:Int = 0;
 
 	private var healthBarBG:FlxSprite;
@@ -136,7 +136,7 @@ class PlayState extends MusicBeatState
 
 	var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
-	var songScore:Int = 0;
+	public var songScore:Int = 0;
 
 	var curLight:Int = 0;
 	var lightningStrikeBeat:Int = 0;
@@ -148,13 +148,13 @@ class PlayState extends MusicBeatState
 	var tankWatchtower:BGSprite;
 	var tankGround:BGSprite;
 
-	var scoreTxt:FlxText;
+	public var scoreTxt:FlxText;
 	var botplayTxt:FlxText;
 	var engineWatermark:FlxText;
 	var songName:FlxText;
 
-	var allNotesMs:Float = 0;
-	var averageMs:Float = 0;
+	public var allNotesMs:Float = 0;
+	public var averageMs:Float = 0;
 
 	var msTimeTxt:FlxText;
 	var msTimeTxtTween:FlxTween;
@@ -167,7 +167,7 @@ class PlayState extends MusicBeatState
 
 	public static var theFunne:Bool = true;
 
-	var inCutscene:Bool = false;
+	public var inCutscene:Bool = false;
 
 	public var backgroundSprites:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
 

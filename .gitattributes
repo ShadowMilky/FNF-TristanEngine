@@ -2,6 +2,4 @@
 * text=auto
 
 # Include Script files
-*.lua linguist-language=Lua
-
 *.hx linguist-language=Haxe

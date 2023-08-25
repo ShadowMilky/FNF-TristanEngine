@@ -339,6 +339,10 @@ class CreditsMenuState extends MusicBeatState
 				{
 					changeSelection(1);
 				}
+				if (FlxG.mouse.wheel != 0)
+				{
+					changeSelection(-FlxG.mouse.wheel);
+				}
 				if (back)
 				{
 					FlxG.switchState(new MainMenuState());

@@ -366,6 +366,10 @@ class FreeplayState extends MusicBeatState
 				changeSelection(-1);
 			if (downP && canInteract)
 				changeSelection(1);
+			if (FlxG.mouse.wheel != 0 && canInteract)
+			{
+				changeSelection(-FlxG.mouse.wheel);
+			}
 
 			if (controls.BACK && canInteract)
 			{
@@ -551,7 +555,8 @@ class FreeplayState extends MusicBeatState
 
 			item.alpha = 0.6;
 
-			if (item.targetY == 0) item.alpha = 1;
+			if (item.targetY == 0)
+				item.alpha = 1;
 		}
 	}
 }

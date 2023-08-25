@@ -13,8 +13,17 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
-import openfl.events.IOErrorEvent;
-import openfl.events.IOErrorEvent;
+import openfl.net.FileReference;
+import flixel.addons.ui.FlxInputText;
+import flixel.addons.ui.FlxUI9SliceSprite;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUIState;
+import flixel.addons.ui.FlxUICheckBox;
+import flixel.addons.ui.FlxUIDropDownMenu;
+import flixel.addons.ui.FlxUIInputText;
+import flixel.addons.ui.FlxUINumericStepper;
+import flixel.addons.ui.FlxUITabMenu;
+import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
 
 class CharEditingState extends MusicBeatState
 {
@@ -22,14 +31,28 @@ class CharEditingState extends MusicBeatState
 	var dad:Character;
 	var char:Character;
 	var animationGhost:Character;
+
 	var textAnim:FlxText;
 	var dumbTexts:FlxTypedGroup<FlxText>;
+
 	var animList:Array<String> = [];
 	var curAnim:Int = 0;
 	var isDad:Bool = true;
 	var daAnim:String = 'spooky';
+
 	var camFollow:FlxObject;
+
 	var _file:FileReference;
+
+	var background:FlxSprite;
+	var curt:FlxSprite;
+	var front:FlxSprite;
+
+	var UI_box:FlxUITabMenu;
+	var UI_options:FlxUITabMenu;
+
+	var offsetX:FlxUINumericStepper;
+	var offsetY:FlxUINumericStepper;
 
 	public function new(daAnim:String = 'spooky')
 	{
@@ -43,9 +66,33 @@ class CharEditingState extends MusicBeatState
 
 		FlxG.mouse.visible = true;
 
-		var gridBG:FlxSprite = FlxGridOverlay.create(10, 10);
-		gridBG.scrollFactor.set(0.5, 0.5);
-		add(gridBG);
+		/*
+			var gridBG:FlxSprite = FlxGridOverlay.create(10, 10);
+			gridBG.scrollFactor.set(0.5, 0.5);
+			add(gridBG);
+		 */
+
+		background = new FlxSprite(-600, -525).loadGraphic(Paths.image('stages/stage/stageback', 'shared'));
+		front = new FlxSprite(-650, 325).loadGraphic(Paths.image('stages/stage/stagefront', 'shared'));
+		curt = new FlxSprite(-500, -625).loadGraphic(Paths.image('stages/stage/stagecurtains', 'shared'));
+		background.antialiasing = true;
+		front.antialiasing = true;
+		curt.antialiasing = true;
+
+		background.screenCenter(X);
+		background.scale.set(0.7, 0.7);
+		front.screenCenter(X);
+		front.scale.set(0.7, 0.7);
+		curt.screenCenter(X);
+		curt.scale.set(0.7, 0.7);
+
+		background.scrollFactor.set(0.9, 0.9);
+		curt.scrollFactor.set(0.9, 0.9);
+		front.scrollFactor.set(0.9, 0.9);
+
+		add(background);
+		add(front);
+		add(curt);
 
 		if (daAnim == 'bf')
 			isDad = false;
@@ -81,10 +128,24 @@ class CharEditingState extends MusicBeatState
 
 		textAnim = new FlxText(300, 16);
 		textAnim.size = 26;
+		textAnim.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
 		textAnim.scrollFactor.set();
 		add(textAnim);
 
 		genBoyOffsets();
+
+		var tabs = [{name: "Offsets", label: 'Offset menu'},];
+
+		UI_box = new FlxUITabMenu(null, tabs, true);
+
+		UI_box.scrollFactor.set();
+		UI_box.resize(150, 200);
+		UI_box.x = FlxG.width - UI_box.width - 20;
+		UI_box.y = 20;
+
+		add(UI_box);
+
+		addOffsetUI();
 
 		camFollow = new FlxObject(0, 0, 2, 2);
 		camFollow.screenCenter();
@@ -97,6 +158,35 @@ class CharEditingState extends MusicBeatState
 		animationGhost.alpha = 0.3;
 	}
 
+	function addOffsetUI():Void
+	{
+		var offsetX_label = new FlxText(10, 10, 'X Offset');
+
+		var UI_offsetX:FlxUINumericStepper = new FlxUINumericStepper(10, offsetX_label.y + offsetX_label.height + 10, 1,
+			char.animOffsets.get(animList[curAnim])[0], -500.0, 500.0, 0);
+		UI_offsetX.value = char.animOffsets.get(animList[curAnim])[0];
+		UI_offsetX.name = 'offset_x';
+		offsetX = UI_offsetX;
+
+		var offsetY_label = new FlxText(10, UI_offsetX.y + UI_offsetX.height + 10, 'Y Offset');
+
+		var UI_offsetY:FlxUINumericStepper = new FlxUINumericStepper(10, offsetY_label.y + offsetY_label.height + 10, 1,
+			char.animOffsets.get(animList[curAnim])[0], -500.0, 500.0, 0);
+		UI_offsetY.value = char.animOffsets.get(animList[curAnim])[1];
+		UI_offsetY.name = 'offset_y';
+		offsetY = UI_offsetY;
+
+		var tab_group_offsets = new FlxUI(null, UI_box);
+		tab_group_offsets.name = "Offsets";
+
+		tab_group_offsets.add(offsetX_label);
+		tab_group_offsets.add(offsetY_label);
+		tab_group_offsets.add(UI_offsetX);
+		tab_group_offsets.add(UI_offsetY);
+
+		UI_box.addGroup(tab_group_offsets);
+	}
+
 	function genBoyOffsets(pushList:Bool = true):Void
 	{
 		var daLoop:Int = 0;
@@ -105,7 +195,8 @@ class CharEditingState extends MusicBeatState
 		{
 			var text:FlxText = new FlxText(10, 20 + (18 * daLoop), 0, anim + ": " + offsets, 15);
 			text.scrollFactor.set();
-			text.color = FlxColor.BLUE;
+			text.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+			text.color = FlxColor.WHITE;
 			dumbTexts.add(text);
 
 			if (pushList)
@@ -114,8 +205,26 @@ class CharEditingState extends MusicBeatState
 		}
 	}
 
+	function copyBoyOffsets():Void
+	{
+		var result = "";
+
+		for (anim => offsets in char.animOffsets)
+		{
+			var text = anim + " " + offsets.join(" ");
+			result += text + "\n";
+		}
+
+		trace("Outputting animation offsets to clipboard...");
+
+		openfl.system.System.setClipboard(result);
+	}
+
 	function updateTexts():Void
 	{
+		offsetX.value = char.animOffsets.get(animList[curAnim])[0];
+		offsetY.value = char.animOffsets.get(animList[curAnim])[1];
+
 		dumbTexts.forEach(function(text:FlxText)
 		{
 			text.kill();
@@ -123,17 +232,53 @@ class CharEditingState extends MusicBeatState
 		});
 	}
 
+	override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>)
+	{
+		if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper))
+		{
+			var offset:FlxUINumericStepper = cast sender;
+			var offsetName = offset.name;
+			switch (offsetName)
+			{
+				case 'offset_x':
+					char.animOffsets.get(animList[curAnim])[0] = offset.value;
+					updateTexts();
+					genBoyOffsets(false);
+					char.playAnim(animList[curAnim]);
+				case 'offset_y':
+					char.animOffsets.get(animList[curAnim])[1] = offset.value;
+					updateTexts();
+					genBoyOffsets(false);
+					char.playAnim(animList[curAnim]);
+			}
+		}
+	}
+
 	override function update(elapsed:Float)
 	{
 		textAnim.text = char.animation.curAnim.name;
+
+		if (FlxG.mouse.overlaps(char) && FlxG.mouse.pressed)
+		{
+			// HOW THE FUCK DO I CONVERT THIS
+			char.animOffsets.get(animList[curAnim])[0] = Math.round(-FlxG.mouse.screenX + (char.width * 1.5));
+			char.animOffsets.get(animList[curAnim])[1] = Math.round(-FlxG.mouse.screenY + (char.height / 1.5));
+
+			updateTexts();
+			genBoyOffsets(false);
+			char.playAnim(animList[curAnim]);
+			// TO MOUSE MOVEMENT?????????
+		}
 
 		if (FlxG.keys.justPressed.Z)
 		{
 			saveOffset();
 		}
+
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
-			FlxG.switchState(new MainMenuState());
+			FlxG.mouse.visible = false;
+			FlxG.switchState(new PlayState());
 		}
 		if (FlxG.keys.justPressed.E)
 			FlxG.camera.zoom += 0.25;
@@ -172,14 +317,18 @@ class CharEditingState extends MusicBeatState
 		}
 		if (FlxG.keys.justPressed.F)
 		{
-			char.flipX = false;
-			animationGhost.flipX = false;
+			char.flipX = !char.flipX;
+			animationGhost.flipX = !animationGhost.flipX;
+			;
 		}
 		if (FlxG.keys.justPressed.G)
 		{
 			char.flipX = true;
 			animationGhost.flipX = true;
 		}
+
+		if (FlxG.keys.justPressed.TWO)
+			animationGhost.visible = true;
 
 		if (curAnim < 0)
 			curAnim = animList.length - 1;
@@ -221,6 +370,9 @@ class CharEditingState extends MusicBeatState
 			genBoyOffsets(false);
 			char.playAnim(animList[curAnim]);
 		}
+
+		if (FlxG.keys.justPressed.V)
+			copyBoyOffsets();
 
 		super.update(elapsed);
 	}

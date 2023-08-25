@@ -67,6 +67,10 @@ class ChangeLanguageState extends MusicBeatState
 
 		if (!selectedLanguage)
 		{
+			if (FlxG.mouse.wheel != 0)
+			{
+				changeSelection(-FlxG.mouse.wheel);
+			}
 			if (FlxG.sound.music != null)
 			{
 				Conductor.songPosition = FlxG.sound.music.time;

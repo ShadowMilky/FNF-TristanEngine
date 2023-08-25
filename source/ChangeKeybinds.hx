@@ -120,6 +120,10 @@ class ChangeKeybinds extends MusicBeatState
 				{
 					changeSelection(1);
 				}
+				if (FlxG.mouse.wheel != 0)
+				{
+					changeSelection(-FlxG.mouse.wheel);
+				}
 				if (accept)
 				{
 					switch (curTextGroup.groupName)

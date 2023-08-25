@@ -34,8 +34,24 @@ class TitleState extends MusicBeatState
 
 	var curWacky:Array<String> = [];
 
+	static function clearTemps(dir:String)
+	{
+		#if desktop
+		for (file in FileSystem.readDirectory(dir))
+		{
+			var file = './$dir/$file';
+			if (FileSystem.isDirectory(file))
+				clearTemps(file);
+			else if (file.endsWith(".tempcopy"))
+				FileSystem.deleteFile(file);
+		}
+		#end
+	}
+
 	override public function create():Void
 	{
+		clearTemps("./");
+
 		PlayerSettings.init();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -138,6 +154,9 @@ class TitleState extends MusicBeatState
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		add(titleText);
+
+		FlxTween.tween(logoBl, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
+		FlxTween.tween(logo, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG, startDelay: 0.1});
 
 		credGroup = new FlxGroup();
 		add(credGroup);
